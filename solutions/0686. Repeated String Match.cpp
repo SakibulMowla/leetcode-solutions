@@ -1,22 +1,20 @@
 class Solution {
 public:
     int repeatedStringMatch(string A, string B) {
-        int lenA = A.size(), lenB = B.size();
-        int ans = -1;
-        for (int start = 0; start < lenA; start++) {
+        int aLen = A.size(), bLen = B.size();
+        for (int i = 0; i < aLen; i++) {
             bool flag = true;
-            for (int i = 0; i < lenB; i++) {
-                if (A[(start + i) % lenA] != B[i]) {
+            for (int j = 0, k = i; j < bLen; j++, k++) {
+                if (k == aLen) k = 0;
+                if (B[j] != A[k]) {
                     flag = false;
                     break;
                 }
             }
             if (flag) {
-                ans = (start + lenB) / lenA + ((start + lenB) % lenA != 0);
-                break;
+                return (bLen + i) / aLen + bool((bLen + i) % aLen);
             }
         }
-        
-        return ans;
+        return -1;
     }
 };
