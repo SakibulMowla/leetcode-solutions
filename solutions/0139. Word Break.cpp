@@ -50,30 +50,25 @@ public:
 class Solution {
 public:
     bool wordBreak(string s, vector<string>& wordDict) {
-        int len = s.size(), sz = wordDict.size();
-        
-        vector<bool> dp(len + 1, false);
-        dp[0] = true;
+        int maxWordSize = 0;
         unordered_set<string> hash;
-        int mx = 0;
-        
-        for (int i = 0; i < sz; i++) {
-            hash.insert(wordDict[i]);
-            mx = max(mx, (int)wordDict[i].size());
+        for (string word: wordDict) {
+            maxWordSize = max(maxWordSize, (int)word.size());
+            hash.insert(word);
         }
         
-        for (int i = 0; i < len; i++) {
-            if (dp[i]) {
-                string tmp;
-                for (int j = i; j < len && (j - i + 1) <= mx; j++) {
-                    tmp.push_back(s[j]);
-                    if (hash.find(tmp) != hash.end()) {
-                        dp[j + 1] = true;
-                    }
-                }
+        int n = s.size();
+        vector<bool> dp(n, false);
+
+        for (int i = 0; i < s.size(); i++) {
+            if (i < maxWordSize) {
+                dp[i] = hash.find(s.substr(0, i + 1)) != hash.end();
+            }
+            for (int j = i - 1; j >= 0 && i - j <= maxWordSize && !dp[i]; j--) {
+                dp[i] = dp[j] && (hash.find(s.substr(j + 1, i - j)) != hash.end());
             }
         }
         
-        return dp[len];
+        return dp[n - 1];
     }
 };
