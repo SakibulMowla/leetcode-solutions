@@ -17,32 +17,28 @@ public:
 class Solution {
 public:
     Node* copyRandomList(Node* head) {
-        if (head == nullptr) {
-            return nullptr;
-        }
-
-        unordered_map<Node*, Node*> dupMap;
-        Node* headCopy = head;
+        Node* dupHead = NULL;
+        Node* pre = NULL;
         
+        unordered_map<Node*, Node*> dupMap;
+
         while (head) {
             if (dupMap.find(head) == dupMap.end()) {
                 dupMap[head] = new Node(head->val);
             }
-            Node* dupHead = dupMap[head];
-
+            if (pre) {
+                pre->next = dupMap[head];
+            } else {
+                dupHead = dupMap[head];
+            }
             if (head->random && dupMap.find(head->random) == dupMap.end()) {
                 dupMap[head->random] = new Node(head->random->val);
             }
-            dupHead->random = head->random ? dupMap[head->random] : nullptr;
-            
-            if (head->next && dupMap.find(head->next) == dupMap.end()) {
-                dupMap[head->next] = new Node(head->next->val);
-            }
-            dupHead->next = head->next ? dupMap[head->next] : nullptr;
-
+            dupMap[head]->random = dupMap[head->random];
+            pre = dupMap[head];
             head = head->next;
         }
-
-        return dupMap[headCopy];
+        
+        return dupHead;
     }
 };
