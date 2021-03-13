@@ -16,7 +16,6 @@ public:
         int tmp = ans;
         if (target > root->val && root->right) {
             tmp = closestValue(root->right, target);
-
         } else if (target < root->val && root->left) {
             tmp = closestValue(root->left, target); 
         }
