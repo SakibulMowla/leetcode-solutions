@@ -1,27 +1,25 @@
-/**
- * Definition for an interval.
- * struct Interval {
- *     int start;
- *     int end;
- *     Interval() : start(0), end(0) {}
- *     Interval(int s, int e) : start(s), end(e) {}
- * };
- */
 class Solution {
 public:
-
-    vector<Interval> intervalIntersection(vector<Interval>& A, vector<Interval>& B) {
-        int n1 = A.size(), n2 = B.size();
-        vector<Interval> ans;
+    vector<vector<int>> intervalIntersection(vector<vector<int>>& firstList, vector<vector<int>>& secondList) {
+        int len1 = firstList.size();
+        int len2 = secondList.size();
         
-        for (int i = 0, j = 0; i < n1 && j < n2; ) {
-            int lft = max(A[i].start, B[j].start);
-            int rht = min(A[i].end, B[j].end);
-            
-            if (lft <= rht) ans.push_back(Interval(lft, rht));
-            
-            if (A[i].end < B[j].end) i++;
-            else j++;
+        int ptr1 = 0;
+        int ptr2 = 0;
+        
+        vector<vector<int>> ans;
+        
+        while (ptr1 < len1 && ptr2 < len2) {
+            int lft = max(firstList[ptr1][0], secondList[ptr2][0]);
+            int rht = min(firstList[ptr1][1], secondList[ptr2][1]);
+            if (lft <= rht) {
+                ans.push_back({lft, rht});   
+            }
+            if (firstList[ptr1][1] < secondList[ptr2][1]) {
+                ptr1++;
+            } else {
+                ptr2++;
+            }
         }
         
         return ans;
