@@ -15,20 +15,16 @@ public:
                 ans += s[i];
             } else {
                 if (s[i] == '(') {
-                    sum++;
-                    ans += s[i];
+                    if (rightCount[i + 1] >= sum + 1) {
+                        sum++;
+                        ans += s[i];
+                    }
                 } else {
                     if (sum) {
                         ans += s[i];
                         sum--;
                     }
                 }
-            }
-        }
-        
-        for (int i = 0; i < n && sum; i++) {
-            if (s[i] == '(') {
-                ans.erase()
             }
         }
         
