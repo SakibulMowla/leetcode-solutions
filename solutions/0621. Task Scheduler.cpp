@@ -1,3 +1,5 @@
+// ==================== O(N) ======================= //
+
 class Solution {
 public:
     int leastInterval(vector<char>& tasks, int n)
@@ -35,5 +37,32 @@ public:
         }
 
         return ans;
+    }
+};
+
+// =============== O(26) ================ //
+
+class Solution {
+public:
+    int leastInterval(vector<char>& tasks, int n) {
+        unordered_map<char, int> cnt;
+        for (char task: tasks) {
+            if (cnt.find(task) == cnt.end()) {
+                cnt[task] = 0;
+            }
+            cnt[task]++;
+        }
+        
+        int maxFreq = 0;
+        for (auto it: cnt) {
+            maxFreq = max(maxFreq, it.second);
+        }
+        
+        int cntMaxFreq = 0;
+        for (auto it: cnt) {
+            cntMaxFreq += it.second == maxFreq;
+        }
+        
+        return max((int)tasks.size(), (n + 1) * (maxFreq - 1) + cntMaxFreq);
     }
 };
