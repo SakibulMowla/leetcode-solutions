@@ -1,41 +1,62 @@
 class Solution {
-public:
-    void bctk(
-        int n,
-        int row,
-        vector<pair<int, int>>& current,
-        vector<vector<string>>& ans
-    ) {
-        if (0 == row) {
-            vector<string> board(n, string(n, '.'));
-            for (auto queen: current) {
-                board[queen.first - 1][queen.second - 1] = 'Q';
-            }
-            ans.push_back(board);
+public:    
+    int n;
+    vector<int> positions;
+    vector<bool> col;
+    vector<bool> diag1;
+    vector<bool> diag2;
+    vector<vector<string>> ans;
+
+    void addSolution(vector<int>& positions) {
+        vector<string> now(n);
+        for (int i = 0; i < n; i++) {
+            now[i] = string(n, '.');
+            now[i][positions[i]] = 'Q';
+        }
+        ans.push_back(now);
+        return;
+    }
+    
+    bool doesNotAttack(int i, int row) {
+        return !col[i] && !diag1[row - i + 2 * n] && !diag2[row + i];
+    }
+    
+    void addQueen(int row, int i) {
+        col[i] = true;
+        diag1[row - i + 2 * n] = true;
+        diag2[row + i] = true;
+        positions[row] = i;
+    }
+    
+    void removeQueen(int row, int i) {
+        col[i] = false;
+        diag1[row - i + 2 * n] = false;
+        diag2[row + i] = false;
+    }
+
+    void backtrack(int row) {
+        if (row == -1) {
+            addSolution(positions);
         } else {
-            for (int col = 1; col <= n; col++) {
-                bool flag = true;
-                for (auto queen: current) {
-                    if (queen.second == col ||
-                       abs(queen.first - row) == abs(queen.second - col)) {
-                        flag = false;
-                        break;
-                    }
-                }
-                if (flag) {
-                    current.push_back({row, col});
-                    bctk(n, row - 1, current, ans);
-                    current.pop_back();
+            for (int i = 0; i < n; i++) {
+                if (doesNotAttack(i, row)) {
+                    addQueen(row, i);
+                    backtrack(row - 1);
+                    removeQueen(row, i);
                 }
             }
         }
         return;
     }
-
+    
     vector<vector<string>> solveNQueens(int n) {
-        vector<vector<string>> ans;
-        vector<pair<int, int>> current;
-        bctk(n, n, current, ans);
+        this->n = n;
+        positions = vector<int>(n);
+        col = vector<bool> (n, false);
+        diag1 = vector<bool> (3 * n + 1, false);
+        diag2 = vector<bool> (2 * n + 1, false);
+        ans.clear();
+        backtrack(n - 1);
         return ans;
     }
 };
