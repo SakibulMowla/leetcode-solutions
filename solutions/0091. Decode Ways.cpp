@@ -1,3 +1,7 @@
+// =============================================
+// Time - O(n) Memory - O(n)
+// =============================================
+
 class Solution {
 public:
     int numDecodings(string s) {
@@ -11,5 +15,39 @@ public:
             if (twoDigit >= 10 && twoDigit <= 26) dp[i] += dp[i - 2];
         }
         return dp[n];
+    }
+};
+
+
+// =============================================
+// Time - O(n) Memory - O(1)
+// =============================================
+
+class Solution {
+public:
+    int numDecodings(string s) {
+        int n = s.size();
+        int secondLast = 0;
+        int last = 1;
+    
+        for (int i = 0; i < n; i++) {
+            int now = 0;
+            
+            if (s[i] != '0') {
+                now += last;
+            }
+            
+            if (i) {
+                int twoDigits = stoi(s.substr(i - 1, 2));
+                if (twoDigits >= 10 && twoDigits <= 26) {
+                    now += secondLast;
+                }
+            }
+            
+            secondLast = last;
+            last = now;
+        }
+        
+        return last;
     }
 };
