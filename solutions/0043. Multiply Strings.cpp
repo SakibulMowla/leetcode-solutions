@@ -1,63 +1,62 @@
 class Solution {
-public:
-    vector<string> dp;
-
-    string add(const string& num1, const string& num2) {
+private:
+    string add(string num1, string num2) {
+        int len1 = num1.size();
+        int len2 = num2.size();
         int carry = 0;
         string ans;
-        for (int i = 0; i < max(num1.size(), num2.size()); i++) {
-            if (i < num1.size()) carry += num1[i] - '0';
-            if (i < num2.size()) carry += num2[i] - '0';
-            ans += (carry % 10) + '0';
+        for (int i = 0; i < max(len1, len2); i++) {
+            carry += (i < len1) ? num1[i] - '0' : 0;
+            carry += (i < len2) ? num2[i] - '0' : 0;
+            ans += (char)((carry % 10) + '0');
             carry /= 10;
         }
-        if (carry || ans == "") {
-            ans += carry + '0';
+        if (carry) {
+            ans += (char)(carry + '0');
         }
         return ans;
     }
     
-    string multiply(const string& num, int digit) {
-        if (dp[digit].size()) {
-            return dp[digit];
-        }
-        if (digit == 0) {
-            return dp[0] = "0";
-        }
-        int carry = 0;
+    string multiply(string num, int digit) {
         string ans;
-        for (char ch: num) {
-            carry += digit * (ch - '0');
-            ans += (carry % 10) + '0';
+        int carry = 0;
+        for (int i = 0; i < num.size(); i++) {
+            carry += (num[i] - '0') * digit;
+            ans += (char)((carry % 10) + '0');
             carry /= 10;
         }
-        if (carry || ans == "") {
-            ans += carry + '0';
+        if (carry) {
+            ans += (char)(carry + '0');
         }
-        return dp[digit] = ans;
+        return ans;
     }
     
-    void removeLeading(string& num) {
+    void removeLeadingZeros(string& num) {
         while (num.size() > 1 && num[0] == '0') {
             num.erase(0, 1);
         }
         return;
     }
-    
+
+public:
     string multiply(string num1, string num2) {
         reverse(num1.begin(), num1.end());
         reverse(num2.begin(), num2.end());
         
-        dp = vector<string>(10);
-        
-        string ans;
-        string zeros;
-        for (char ch: num2) {
-            ans = add(ans, zeros + multiply(num1, ch - '0'));
-            zeros += '0';
+        vector<string> dp(10);
+        for (int i = 0; i < 10; i++) {
+            dp[i] = multiply(num2, i);
         }
+        
+        string ans = "0";
+        for (int i = 0; i < num1.size(); i++) {
+            string now = string(i, '0') + dp[num1[i] - '0'];
+            ans = add(ans, now);
+        }
+        
         reverse(ans.begin(), ans.end());
-        removeLeading(ans);
+        removeLeadingZeros(ans);
+        
         return ans;
     }
 };
