@@ -42,6 +42,24 @@ public:
 
 --------------------------------------------------------------------------
 /*
+- Time Complexity - O(n)
+- Space Complexity - O(1)
+*/
+
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums) {
+        for (int i = 0, zeroIndex = 0; i < nums.size(); i++) {
+            if (nums[i]) {
+                swap(nums[i], nums[zeroIndex++]);
+            }
+        }
+        return;
+    }
+};
+
+--------------------------------------------------------------------------
+/*
 Input:
 [0,1,0,3,12]
 [0,0,0,1,1]
