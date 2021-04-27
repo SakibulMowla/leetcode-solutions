@@ -54,29 +54,30 @@ public:
  * };
  */
 class Solution {
-public:
+private:
     TreeNode* dfs(TreeNode* root) {
-        if (root == nullptr) {
+        if (!root) {
+            return nullptr;
+        }        
+        if (!root->left && !root->right) {
             return root;
         }
-        TreeNode* leftHalf = dfs(root->left);
-        TreeNode* rightHalf = dfs(root->right);
-        if (leftHalf) {
-            TreeNode* tmp = leftHalf;
-            while (tmp->right) {
-                tmp = tmp->right;
-            }
-            tmp->right = rightHalf;
-            root->right = leftHalf;
-        } else {
-            root->right = rightHalf;
+        
+        TreeNode* leftRightMost = dfs(root->left);
+        TreeNode* rightRightMost = dfs(root->right);
+        
+        if (leftRightMost) {
+            leftRightMost->right = root->right;
+            root->right = root->left;
+            root->left = nullptr;
         }
-        root->left = nullptr;
-        return root;
+        
+        return rightRightMost ? rightRightMost : leftRightMost;
     }
 
+public:
     void flatten(TreeNode* root) {
-        root = dfs(root);
+        dfs(root);
         return;
     }
 };
