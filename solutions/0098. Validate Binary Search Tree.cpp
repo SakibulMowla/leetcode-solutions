@@ -11,16 +11,17 @@
  */
 class Solution {
 public:
-    bool isValidBST(TreeNode* root,
-        long long mn = numeric_limits<int>::min(),
-        long long mx = numeric_limits<int>::max()) {
-        if (root == nullptr) {
+    bool isValidBST(TreeNode* root, TreeNode* minimum = nullptr, TreeNode* maximum = nullptr) {
+        if (!root) {
             return true;
         }
-        if (root->val < mn || root->val > mx) {
+        if (maximum && root->val >= maximum->val) {
             return false;
         }
-        return isValidBST(root->left, mn, root->val - 1LL) &&
-            isValidBST(root->right, root->val + 1LL, mx);
+        if (minimum && root->val <= minimum->val) {
+            return false;
+        }
+        return isValidBST(root->left, minimum, root) &&
+            isValidBST(root->right, root, maximum);
     }
 };
