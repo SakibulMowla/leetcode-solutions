@@ -39,3 +39,43 @@ public:
         return ans;
     }
 };
+
+// =====================================================================
+// ==================== Time - O(klog(min(n, k)) ======================
+// =====================================================================
+
+class Solution {
+private:
+    struct Data {
+        int x;
+        int y;
+        int val;
+        Data() {}
+        Data(int x, int y, int val): x(x), y(y), val(val) {}
+        bool operator < (const Data& data) const {
+            return val > data.val;
+        }
+    };
+
+public:
+    int kthSmallest(vector<vector<int>>& matrix, int k) {
+        int n = matrix.size();
+        priority_queue<Data> pq;
+
+        for (int i = 0; i < min(n, k); i++) {
+            pq.push(Data(i, 0, matrix[i][0]));            
+        }
+
+        Data top;
+        while (k--) {
+            top = pq.top();
+            pq.pop();
+            
+            if (top.y + 1 < n) {
+                pq.push(Data(top.x, top.y + 1, matrix[top.x][top.y + 1]));
+            }
+        }
+        
+        return top.val;
+    }
+};
