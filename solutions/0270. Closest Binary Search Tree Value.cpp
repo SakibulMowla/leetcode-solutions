@@ -10,18 +10,34 @@
  * };
  */
 class Solution {
+private:
+    void dfs(TreeNode* root, int& best, double target) {
+        if (!root) {
+            return;
+        }        
+        
+        if (abs(root->val - target) < abs(best - target)) {
+            best = root->val;
+        }
+        
+        if (target < root->val) {
+            dfs(root->left, best, target);
+        } else {
+            dfs(root->right, best, target);
+        }
+        
+        return;
+    }
+
 public:
     int closestValue(TreeNode* root, double target) {
-        int ans = root->val;
-        int tmp = ans;
-        if (target > root->val && root->right) {
-            tmp = closestValue(root->right, target);
-        } else if (target < root->val && root->left) {
-            tmp = closestValue(root->left, target); 
+        if (!root) {
+            return -1;
         }
-        if (abs(target - tmp) < abs(target - ans)) {
-            ans = tmp;
-        }
-        return ans;
+        
+        int best = root->val;
+        dfs(root, best, target);
+        
+        return best;
     }
 };
