@@ -1,27 +1,30 @@
 class Solution {
+private:
+    unordered_map<char, char> complement = {
+        { '(', ')' },
+        { '{', '}' },
+        { '[', ']' }
+    };
+
 public:
     bool isValid(string s) {
-        map<char, char> bracketPair;
-        bracketPair['('] = ')';
-        bracketPair['{'] = '}';
-        bracketPair['['] = ']';
-        stack<char> bracketPile;
-        
-        for (int i = 0; i < s.size(); i++) {
-            if (bracketPair.find(s[i]) != bracketPair.end()) {
-                bracketPile.push(s[i]);
+        stack<char> stk;
+
+        for (char ch: s) {
+            if (complement.find(ch) != complement.end()) {
+                stk.push(ch);
             } else {
-                if (bracketPile.size() == 0) {
+                if (stk.empty()) {
                     return false;
                 }
-                char bracketOnTop = bracketPile.top();
-                bracketPile.pop();
-                if (bracketPair[bracketOnTop] != s[i]) {
+                char top = stk.top();
+                stk.pop();
+                if (complement[top] != ch) {
                     return false;
                 }
             }
         }
-        
-        return bracketPile.size() == 0;
+
+        return stk.empty();
     }
 };
