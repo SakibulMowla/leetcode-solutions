@@ -5,7 +5,7 @@ private:
     int n;
     int target;
     string num;
-    
+
     void backtrack(int index, ll prev, ll cur, ll val, vector<string>& entries) {
         if (index == n) {
             if (val == target && cur == 0) {
