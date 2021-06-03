@@ -1,15 +1,15 @@
 class Solution {
-public:
-    int binarySearch(vector<int>& nums, int target, bool findLo = true) {
+private:
+    int binarySearch(vector<int>& nums, int target, bool findStarting) {
+        int n = nums.size();
         int lo = 0;
-        int hi = nums.size() - 1;
+        int hi = n - 1;
         int ans = -1;
-
         while (lo <= hi) {
             int mid = lo + (hi - lo) / 2;
             if (nums[mid] == target) {
                 ans = mid;
-                if (findLo) {
+                if (findStarting) {
                     hi = mid - 1;
                 } else {
                     lo = mid + 1;
@@ -20,11 +20,16 @@ public:
                 lo = mid + 1;
             }
         }
-
         return ans;
     }
     
+public:
     vector<int> searchRange(vector<int>& nums, int target) {
-        return vector<int> { binarySearch(nums, target), binarySearch(nums, target, false) }; 
+        int startIndex = binarySearch(nums, target, true);
+        if (startIndex == -1) {
+            return {-1, -1};
+        }
+        int endIndex = binarySearch(nums, target, false);
+        return {startIndex, endIndex};
     }
 };
