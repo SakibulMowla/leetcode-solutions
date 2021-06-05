@@ -9,48 +9,41 @@
  * };
  */
 
+struct Comparator {
+    bool operator() (ListNode* a, ListNode* b) {
+        return a->val > b->val;
+    }
+};
+
 class Solution {
-private:
-    struct data {
-        int val;
-        ListNode* next;
-        data(int val, ListNode* next) : val(val), next(next) {}
-        bool operator < (const data& x) const {
-            return val > x.val;
-        }
-    };
-    
 public:
     ListNode* mergeKLists(vector<ListNode*>& lists) {
-        int n = lists.size();
-        if (n == 0) {
-            return nullptr;
-        }
-        
-        priority_queue<data> pq;
-        
-        for (ListNode* list: lists) {
-            if (list) {
-                pq.push(data(list->val, list->next));
+        priority_queue<ListNode*, vector<ListNode*>, Comparator> pq;
+        for (int i = 0; i < lists.size(); i++) {
+            if (lists[i]) {
+                pq.push(lists[i]);
             }
         }
         
-        ListNode* ans = new ListNode();
-        ListNode* prev = ans;
-        
+        ListNode* head = nullptr;
+        ListNode* prev = nullptr;
         while (!pq.empty()) {
-            data cur = pq.top();
+            ListNode* top = pq.top();
             pq.pop();
             
-            prev->next = new ListNode(cur.val);
-            
-            if (cur.next) {
-                pq.push(data(cur.next->val, cur.next->next));
+            if (!head) {
+                head = top;
             }
+            if (prev) {
+                prev->next = top;
+            }
+            prev = top;
             
-            prev = prev->next;
+            if (top->next) {
+                pq.push(top->next);
+            }
         }
         
-        return ans->next;
+        return head;
     }
 };
