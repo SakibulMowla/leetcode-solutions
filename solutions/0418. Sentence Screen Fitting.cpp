@@ -9,7 +9,7 @@ public:
                 return 0;
             }
         }
-        
+
         vector<int> dp(n);
         for (int start = 0; start < n; start++) {
             int pos = 0;
