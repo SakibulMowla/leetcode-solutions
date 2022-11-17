@@ -1,19 +1,13 @@
 class Solution {
 public:
     vector<int> twoSum(vector<int>& nums, int target) {
-        unordered_map<int, int> hash;
-        int n = nums.size();
-        vector<int> ans;
-
-        for (int i = 0; i < n; i++) {
-            int needed = target - nums[i];
-            if (hash.find(needed) != hash.end()) {
-                ans = { hash[needed], i };
-                break;
+        unordered_map<int, int> numToIndex;
+        for (int i = 0; i < nums.size(); i++) {
+            if (numToIndex.find(target - nums[i]) != numToIndex.end()) {
+                return {numToIndex[target - nums[i]], i};
             }
-            hash[nums[i]] = i;
+            numToIndex[nums[i]] = i;
         }
-        
-        return ans;
+        return {-1, -1}; 
     }
 };
