@@ -5,7 +5,7 @@ private:
         { '{', '}' },
         { '[', ']' }
     };
-
+ 
 public:
     bool isValid(string s) {
         stack<char> stk;
