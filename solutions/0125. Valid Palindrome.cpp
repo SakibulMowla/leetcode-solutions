@@ -1,28 +1,22 @@
 class Solution {
-private:
-    bool isValidChar(char ch) {
-        return isalpha(ch) || isdigit(ch);
-    }
-
 public:
     bool isPalindrome(string s) {
-        int l = 0;
-        int r = s.size() - 1;
-        
-        while (l < r) {
-            if (!isValidChar(s[l])) {
-                l++;
-            } else if (!isValidChar(s[r])) {
-                r--;
+        int length = s.size();
+        int left = 0, right = length - 1;
+
+        while (left < right) {
+            if (!isalnum(s[left])) {
+                left++;
+            } else if (!isalnum(s[right])) {
+                right--;
+            } else if (toupper(s[left]) == toupper(s[right])) {
+                left++;
+                right--;
             } else {
-                if (tolower(s[l]) != tolower(s[r])) {
-                    return false;
-                }
-                l++;
-                r--;
+                return false;
             }
         }
-        
+
         return true;
     }
 };
