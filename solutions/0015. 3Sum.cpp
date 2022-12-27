@@ -22,7 +22,7 @@ public:
                     k--;
                 }
             }
-
+ 
             while (i + 1 < n && nums[i + 1] == nums[i]) i++;
         }
 
