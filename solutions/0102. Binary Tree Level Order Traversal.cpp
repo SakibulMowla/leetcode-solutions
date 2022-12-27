@@ -40,7 +40,7 @@ public:
                 q.push({cur->right, level + 1});
             }
         }
-        
+       
         return ans;
     }
 };
