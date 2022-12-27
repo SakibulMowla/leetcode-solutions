@@ -12,7 +12,7 @@ public:
             lastIndex[s[i]] = i;
             ans = max(ans, i - startIndex + 1);
         }
-        
+       
         return ans;
     }
 };
