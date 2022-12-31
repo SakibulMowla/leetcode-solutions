@@ -83,7 +83,7 @@ public:
         stk.pop();
         return;
     }
-    
+   
     int top() {
         return stk.top();
     }
