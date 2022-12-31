@@ -16,7 +16,7 @@ public:
             }
             length += count;
         }
-
+ 
         return length + (int)oddPresent;
     }
 };
