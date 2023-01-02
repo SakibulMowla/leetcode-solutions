@@ -2,7 +2,7 @@ class Solution {
 public:
     vector<int> dx = { -1, 1, 0, 0 };
     vector<int> dy = { 0, 0, -1, 1 };
-
+ 
     void dfs(int x, int y, vector<vector<char>>& grid, int r, int c) {
         grid[x][y] = '2';
         for (int i = 0; i < 4; i++) {
