@@ -1,32 +1,22 @@
 class Solution {
-public:
-    
-    void backtrack(int pos, int n, vector<int>& nums, vector<vector<int>>& ans) {
-        if (pos == n - 1) {
-            ans.push_back(nums);
-        } else {
-            backtrack(pos + 1, n, nums, ans);
-            for (int i = pos + 1; i < n; i++) {
-                swap(nums[pos], nums[i]);
-                backtrack(pos + 1, n, nums, ans);
-                swap(nums[pos], nums[i]);
-            }
+private:
+    void backtrack(vector<int>& nums, int index, vector<vector<int>>& permutations) {
+        if (index == nums.size() - 1) {
+            permutations.push_back(nums);
+            return;
         }
-        
+
+        for (int i = index; i < nums.size(); i++) {
+            swap(nums[index], nums[i]);
+            backtrack(nums, index + 1, permutations);
+            swap(nums[index], nums[i]);
+        }
         return;
     }
-    
+public:
     vector<vector<int>> permute(vector<int>& nums) {
-        int n = nums.size();
-        vector<vector<int>> ans;
-        
-        if (n == 0) {
-            return ans;
-        }
-
-        sort(nums.begin(), nums.end());
-        backtrack(0, n, nums, ans);
-
-        return ans;
+        vector<vector<int>> permutations;
+        backtrack(nums, 0, permutations);
+        return permutations;
     }
 };
