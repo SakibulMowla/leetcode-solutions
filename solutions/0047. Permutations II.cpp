@@ -37,7 +37,7 @@ public:
     
         vector<int> cur;
         backtrack(n, freq, cur, ans);
-
+ 
         return ans;
     }
 };
