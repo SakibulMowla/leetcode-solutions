@@ -1,4 +1,6 @@
 // Recursive DP
+// Time - O(N * K * T)
+// Space - O(N * T)
 class Solution {
 public:
     const int mod = 1E9 + 7;
@@ -27,6 +29,8 @@ public:
 };
 
 // Iterative DP
+// Time - O(N * K * T)
+// Space - O(N * T)
 class Solution {
 private: 
     const int mod = 1E9 + 7;
@@ -47,5 +51,34 @@ public:
         }
 
         return dp[n][target];
+    }
+};
+
+// Iterative DP + Row swap
+// Time - O(N * K * T)
+// Space - O(T)
+class Solution {
+private: 
+    const int mod = 1E9 + 7;
+public:
+    int numRollsToTarget(int n, int k, int target) {
+        vector<vector<int>> dp(2, vector<int> (target + 1, 0));
+        dp[0][0] = 1;
+        int prevRow = 1, curRow = 0;
+
+        for (int i = 1; i <= n; i++) {
+            swap(curRow, prevRow);
+            fill(dp[curRow].begin(), dp[curRow].end(), 0);
+            for (int face = 1; face <= k; face++) {
+                for (int sum = face; sum <= target; sum++) {
+                    dp[curRow][sum] += dp[prevRow][sum - face];
+                    if (dp[curRow][sum] >= mod) {
+                        dp[curRow][sum] -= mod;
+                    }
+                }
+            }
+        }
+
+        return dp[curRow][target];
     }
 };
