@@ -1,27 +1,25 @@
 // Hashing Approach
+// Time - O(n)
+// Memory - O(n)
 
 class Solution {
 public:
     int majorityElement(vector<int>& nums) {
         int n = nums.size();
-        unordered_map<int, int> hash;
-
-        for (auto &num: nums) {
-            hash[num]++;
-        }
-
-        int ans;
-        for (auto it: hash) {
-            if (it.second > n / 2) {
-                ans = it.first;
-                break;
+        unordered_map<int, int> counter;
+        for (int num: nums) {
+            counter[num]++;
+            if (counter[num] > n / 2) {
+                return num;
             }
         }
-        return ans;
+        return -1;
     }
 };
 
 // Sorting Approach
+// Time - O(nlogn)
+// Memory - O(1)
 
 class Solution {
 public:
@@ -41,5 +39,26 @@ public:
             }
         }
         return ans;
+    }
+};
+
+// Boyer–Moore majority vote algorithm
+// Time - O(n)
+// Memory - O(1)
+
+class Solution {
+public:
+    int majorityElement(vector<int>& nums) {
+        int candidate = -1;
+        int sum = 0;
+
+        for (int num: nums) {
+            if (sum == 0) {
+                candidate = num;
+            }
+            sum += candidate == num ? 1 : -1;
+        }
+
+        return candidate;
     }
 };
