@@ -70,7 +70,7 @@ public:
             swap(curRow, prevRow);
             fill(dp[curRow].begin(), dp[curRow].end(), 0);
             for (int face = 1; face <= k; face++) {
-                for (int sum = face; sum <= target; sum++) {
+                for (int sum = face; sum <= min(i * k, target); sum++) {
                     dp[curRow][sum] += dp[prevRow][sum - face];
                     if (dp[curRow][sum] >= mod) {
                         dp[curRow][sum] -= mod;
