@@ -23,7 +23,7 @@ public:
         if (carry) {
             ans += (carry % 2) + '0';
         }
-        
+   
         reverse(ans.begin(), ans.end());
 
         return ans;
