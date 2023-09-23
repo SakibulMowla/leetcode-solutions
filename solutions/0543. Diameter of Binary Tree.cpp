@@ -15,7 +15,7 @@ public:
         if (root == nullptr) {
             return 0;
         }
-        
+    
         int leftPath = dfs(root->left, ans);
         int rightPath = dfs(root->right, ans);
         
