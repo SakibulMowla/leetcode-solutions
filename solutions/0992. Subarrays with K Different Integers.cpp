@@ -41,3 +41,35 @@ public:
         return ans;
     }
 };
+
+// -----------------------------------------------------
+
+class Solution {
+private:
+    int subarraysWithUptoKDistinct(vector<int>& nums, int k) {
+        unordered_map<int, int> count;
+        int ans = 0;
+        for (int l = 0, r = 0, uniques = 0; r < nums.size(); r++) {
+            if (count.find(nums[r]) == count.end()) {
+                count[nums[r]] = 0;
+                uniques++;
+            }
+            count[nums[r]]++;
+            while (uniques > k) {
+                count[nums[l]]--;
+                if (count[nums[l]] == 0) {
+                    count.erase(nums[l]);
+                    uniques--;
+                }
+                l++;
+            }
+            ans += r - l + 1;
+        }
+        return ans;
+    }
+
+public:
+    int subarraysWithKDistinct(vector<int>& nums, int k) {
+        return subarraysWithUptoKDistinct(nums, k) - subarraysWithUptoKDistinct(nums, k - 1);
+    }
+};
