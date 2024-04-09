@@ -59,3 +59,22 @@ public:
         return;
     }
 };
+
+// One pass - Dutch National Flag Problem
+
+class Solution {
+public:
+    void sortColors(vector<int>& nums) {
+        int i = 0, leftIndex = 0, rightIndex = nums.size() - 1;
+        while (i <= rightIndex) {
+            if (nums[i] == 0) {
+                swap(nums[leftIndex++], nums[i++]);
+            } else if (nums[i] == 2) {
+                swap(nums[i], nums[rightIndex--]);
+            } else {
+                i++;
+            }
+        }
+        return;
+    }
+};
