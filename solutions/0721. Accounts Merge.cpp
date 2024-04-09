@@ -69,3 +69,80 @@ public:
         return buildResultSet(accounts, mergedAccounts);
     }
 };
+
+// --------------------------------------------------------------------------
+
+class Solution {
+private:
+    vector<int> parent, size;
+    map<string, int> emailToParent;
+
+    void initialize(int len) {
+        parent = vector<int>(len);
+        size = vector<int>(len);
+        for (int i = 0; i < len; i++) {
+            parent[i] = i;
+            size[i] = 1;
+        }
+        emailToParent.clear();
+    }
+
+    int findParent(int p) {
+        if (p == parent[p]) {
+            return p;
+        }
+        return parent[p] = findParent(parent[p]);
+    }
+
+    void _union(int a, int b) {
+        a = findParent(a);
+        b = findParent(b);
+
+        if (a == b) {
+            return;
+        }
+
+        if (size[a] <= size[b]) {
+            size[b] += size[a];
+            parent[a] = b;
+        } else {
+            size[a] += size[b];
+            parent[b] = a;
+        }
+
+        return;
+    }
+
+public:
+    vector<vector<string>> accountsMerge(vector<vector<string>>& accounts) {
+        int len = accounts.size();
+        initialize(len);
+
+        for (int i = 0; i < accounts.size(); i++) {
+            auto account = accounts[i];
+            for (int j = 1; j < account.size(); j++) {
+                if (!emailToParent.contains(account[j])) {
+                    emailToParent[account[j]] = findParent(i);
+                } else {
+                    _union(emailToParent[account[j]], i);
+                }
+            }
+        }
+
+        unordered_map<int, int> parentToIndex;
+        vector<vector<string>> ans;
+
+        for (auto it: emailToParent) {
+            int p = findParent(it.second);
+            if (!parentToIndex.contains(p)) {
+                int index = parentToIndex.size();
+                parentToIndex[p] = index;
+                ans.push_back(vector<string>());
+                ans[index].push_back(accounts[p][0]);
+            }
+            ans[parentToIndex[p]].push_back(it.first);
+        }
+
+        return ans;
+    }
+};
