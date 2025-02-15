@@ -1,33 +1,29 @@
 class TimeMap {
 private:
-    vector<vector<pair<int, string>>> store;
-    unordered_map<string, int> keyToIndex;
+    unordered_map<string, vector<pair<int, string>>> store;
 
 public:
     TimeMap() {
     }
     
     void set(string key, string value, int timestamp) {
-        if (!keyToIndex.contains(key)) {
-            keyToIndex[key] = keyToIndex.size();
-            store.push_back(vector<pair<int, string>>());
-        }
-        store[keyToIndex[key]].push_back({timestamp, value});
+        store[key].push_back({timestamp, value});
     }
     
     string get(string key, int timestamp) {
-        if (!keyToIndex.contains(key)) {
+        if (store.find(key) == store.end()) {
             return "";
         }
 
-        int index = keyToIndex[key];
+        vector<pair<int, string>>& keyEntries = store[key];
+
         string ans = "";
-        int low = 0, high = store[index].size() - 1;
+        int low = 0, high = keyEntries.size() - 1;
 
         while (low <= high) {
             int mid = low + (high - low) / 2;
-            if (store[index][mid].first <= timestamp) {
-                ans = store[index][mid].second;
+            if (keyEntries[mid].first <= timestamp) {
+                ans = keyEntries[mid].second;
                 low = mid + 1;
             } else {
                 high = mid - 1;
