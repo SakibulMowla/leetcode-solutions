@@ -11,39 +11,70 @@
  */
 class Solution {
 private:
-    struct Data {
-        TreeNode* node;
-        int height;
-        Data(TreeNode* node, int height): node(node), height(height) {}
-    };
-    
-public:
-    vector<int> rightSideView(TreeNode* root) {
-        queue<Data> q;
-        if (root) {
-            q.push(Data(root, 0));
+    void traverse(TreeNode* root, int level, vector<int>& rightNodes) {
+        if (root == nullptr) {
+            return;
+        }
+        
+        if (level == rightNodes.size()) {
+            rightNodes.push_back(0);
         }
 
+        rightNodes[level] = root->val;
+
+        traverse(root->left, level + 1, rightNodes);
+        traverse(root->right, level + 1, rightNodes);
+
+        return;
+    }
+
+public:
+    vector<int> rightSideView(TreeNode* root) {
+        vector<int> rightNodes;
+        traverse(root, 0, rightNodes);
+        return rightNodes;
+    }
+};
+
+// ----------------------------------------------------------------------
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> rightSideView(TreeNode* root) {
+        queue<pair<TreeNode*, int>> q;
+        q.push({root, 0});
+
         vector<int> ans;
-        
+
         while (!q.empty()) {
-            Data front = q.front();
+            auto front = q.front();
             q.pop();
-            
-            if (ans.size() == front.height) {
-                ans.push_back(front.node->val);
-            } else {
-                ans[front.height] = front.node->val;
+
+            if (front.first == nullptr) {
+                continue;
             }
-            
-            if (front.node->left) {
-                q.push(Data(front.node->left, front.height + 1));
+
+            if (front.second == ans.size()) {
+                ans.push_back(0);
             }
-            if (front.node->right) {
-                q.push(Data(front.node->right, front.height + 1));
-            }
+
+            ans[front.second] = front.first->val;
+
+            q.push({front.first->left, 1 + front.second});
+            q.push({front.first->right, 1 + front.second});
         }
-        
+
         return ans;
     }
 };
