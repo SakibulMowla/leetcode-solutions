@@ -1,5 +1,35 @@
 class Solution {
 public:
+    vector<int> findAnagrams(string s, string p) {
+        unordered_map<char, int> cur, count;
+        for (char ch: p) {
+            count[ch]++;
+        }
+
+        vector<int> ans;
+        
+        for (int left = 0, right = 0; right < s.size(); right++) {
+            char ch = s[right];
+            cur[ch]++;
+
+            while (left <= right && cur[ch] > count[ch]) {
+                cur[s[left]]--;
+                left++;
+            }
+
+            if (right - left + 1 == p.size()) {
+                ans.push_back(left);
+            }
+        }
+
+        return ans;
+    }
+};
+
+// -----------------------------------------------------------------------------
+
+class Solution {
+public:
     void update(unordered_map<char, int>& freq, int& cnt, char key, int value) {
         if (freq.find(key) == freq.end()) {
             freq[key] = 0;
