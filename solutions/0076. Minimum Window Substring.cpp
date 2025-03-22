@@ -1,46 +1,38 @@
 class Solution {
 public:
     string minWindow(string s, string t) {
-        unordered_map<char, int> tHash;
+        unordered_map<int, int> freq;
         for (char ch: t) {
-            if (tHash.find(ch) == tHash.end()) {
-                tHash[ch] = 0;
-            }
-            tHash[ch]++;
+            freq[ch]++;
         }
-        
-        int uniques = tHash.size();
-        int got = 0;
-        int ans = s.size() + 1;
-        int start = -1;
-        unordered_map<char, int> sHash;
 
-        for (int l = 0, r = 0; r < s.size(); r++) {
-            char ch = s[r];
-            if (tHash.find(ch) != tHash.end()) {
-                sHash[ch]++;
-                if (sHash[ch] == tHash[ch]) {
-                    got++;
+        int required = freq.size();
+        int minLen = numeric_limits<int>::max(), pos = 0;
+
+        for (int start = 0, end = 0; end < s.size(); end++) {
+            char ch = s[end];
+            if (freq.find(ch) != freq.end()) {
+                freq[ch]--;
+                if (freq[ch] == 0) {
+                    required--;
                 }
             }
-            while (got == uniques) {
-                char ch = s[l];
-                if (sHash.find(ch) != sHash.end()) {
-                    if (sHash[ch] == tHash[ch]) {
-                        break;
+
+            while (required == 0) {
+                if (freq.find(s[start]) != freq.end()) {
+                    freq[s[start]]++;
+                    if (freq[s[start]] == 1) {
+                        required++;
                     }
-                    sHash[ch]--;
                 }
-                l++;
-            }
-            if (got == uniques) {
-                if (r - l + 1 < ans) {
-                    ans = r - l + 1;
-                    start = l;
+                if (minLen > end - start + 1) {
+                    minLen = end - start + 1;
+                    pos = start;
                 }
+                start++;
             }
         }
-        
-        return start == -1 ? "" : s.substr(start, ans);
+
+        return minLen == numeric_limits<int>::max() ? "" : s.substr(pos, minLen);
     }
 };
