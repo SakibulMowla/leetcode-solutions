@@ -1,3 +1,5 @@
+// Using int
+
 class Solution {
 public:
     int reverse(int x) {
@@ -19,5 +21,31 @@ public:
         }
 
         return ans;
+    }
+};
+
+// -------------------------------------------------
+
+// Using long long
+
+class Solution {
+private:
+    long long absoluteReverse(int x) {
+        long long ans = 0;
+        while (x) {
+            ans = ans * 10 + (x % 10);
+            x /= 10;
+        }
+        return ans;
+    }
+
+public:
+    int reverse(int x) {
+        long long absReverse = absoluteReverse(x);
+
+        return ((absReverse > numeric_limits<int>::max()) ||
+                (absReverse < numeric_limits<int>::min()))
+                   ? 0
+                   : absReverse;
     }
 };
