@@ -37,6 +37,7 @@ public:
 
 // Time - O(n)
 // Memory - O(26)
+// Optimization explanation: https://neetcode.io/solutions/longest-repeating-character-replacement
 
 class Solution {
 public:
