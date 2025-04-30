@@ -64,3 +64,36 @@ public:
         return ans;
     }
 };
+
+// =============================================
+
+/**
+ * Definition of Interval:
+ * class Interval {
+ * public:
+ *     int start, end;
+ *     Interval(int start, int end) {
+ *         this->start = start;
+ *         this->end = end;
+ *     }
+ * }
+ */
+
+class Solution {
+public:
+    int minMeetingRooms(vector<Interval>& intervals) {
+        map<int, int> timePoints;
+        for (auto interval: intervals) {
+            timePoints[interval.start]++;
+            timePoints[interval.end]--;
+        }
+
+        int meetings = 0, ans = 0;
+        for (auto& [key, value]: timePoints) {
+            meetings += value;
+            ans = max(ans, meetings);
+        }
+
+        return ans;
+    }
+};
