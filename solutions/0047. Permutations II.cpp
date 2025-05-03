@@ -41,3 +41,37 @@ public:
         return ans;
     }
 };
+
+// ----------------------------------------------------------------------
+
+class Solution {
+private:
+    void backtrack(vector<vector<int>>& result, vector<int>& nums, int index, int n) {
+        if (index == n) {
+            result.push_back(nums);
+            return;
+        }
+
+        unordered_set<int> seen;
+        for (int i = index; i < n; i++) {
+            if (seen.count(nums[i])) {
+                continue;
+            }
+            seen.insert(nums[i]);
+
+            swap(nums[index], nums[i]);
+            backtrack(result, nums, index + 1, n);
+            swap(nums[index], nums[i]);
+        }
+
+        return;
+    }
+
+public:
+    vector<vector<int>> permuteUnique(vector<int>& nums) {
+        vector<vector<int>> result;
+        backtrack(result, nums, 0, nums.size());
+
+        return result;    
+    }
+};
