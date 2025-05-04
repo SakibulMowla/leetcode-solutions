@@ -32,3 +32,49 @@ public:
 // Codec codec;
 // codec.decode(codec.encode(strs));
 
+
+// --------------------------------------------
+
+class Solution {
+public:
+
+    string encode(vector<string>& strs) {
+        string res;
+        for (string& str: strs) {
+            res += to_string((int)str.size()) + ",";
+        }
+        res += "#";
+
+        for (string& str: strs) {
+            res += str;
+        }
+
+        return res;
+    }
+
+    vector<string> decode(string s) {
+        vector<int> lens;
+        int index = 0;
+        for (int len = 0; index < s.size(); index++) {
+            if (s[index] == '#') {
+                break;
+            } else if (s[index] == ',') {
+                lens.push_back(len);
+                len = 0;
+            } else {
+                len = len * 10 + (s[index] - '0');
+            }
+        }
+        index++;
+
+        vector<string> res;
+        for (int len: lens) {
+            string str = s.substr(index, len);
+            res.push_back(str);
+            index += len;
+        }
+
+        return res;
+    }
+};
+
