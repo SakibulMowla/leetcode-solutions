@@ -1,32 +1,53 @@
+// Recursion
+// Time - O(n)
+// Memory - O(log n)
+
 class Solution {
-public:
-    double absolutePower(double x, long long n) {
-        if (n == 0) {
-            return 1;
-        } else if (n == 1) {
-            return x;
-        } else {
-            double ans = absolutePower(x, n / 2);
-            ans *= ans;
-            if (n % 2 == 1) {
-                ans *= x;
-            }
-            return ans;
-        }
+private:
+    double myPowHelper(double x, long long n) {
+        if (n == 0) return 1.0;
+        if (n == 1) return x;
+
+        double half = myPowHelper(x, n / 2);
+        return (n % 2) ? half * half * x : half * half;
     }
 
+public:
     double myPow(double x, int n) {
-        long long N = n;
-        double ans = absolutePower(abs(x), abs(N));
-        if (x < 0) {
+        bool isNegative = (n < 0);
+        double result = myPowHelper(x, labs(n));
+        return isNegative ? 1.0 / result : result;
+    }
+};
+
+// ---------------------------------------------------------------
+
+// Iteration
+// Time - O(n)
+// Memory - O(1)
+
+class Solution {
+private:
+    double myPowHelper(double x, long long n) {
+        if (n == 0) return 1.0;
+
+        double result = 1.0;
+        while (n > 0) {
+            // Multiply by x when the bit is 1 in binary representation
             if (n % 2 == 1) {
-                ans = -ans;
+                result *= x;
             }
+            x *= x;
+            n /= 2;
         }
-        if (n < 0) {
-            ans = 1.0 / ans;
-        }
-        
-        return ans;
+
+        return result;
+    }
+
+public:
+    double myPow(double x, int n) {
+        bool isNegative = (n < 0);
+        double result = myPowHelper(x, labs(n));
+        return isNegative ? 1.0 / result : result;
     }
 };
