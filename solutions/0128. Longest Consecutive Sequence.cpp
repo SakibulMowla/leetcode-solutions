@@ -62,3 +62,30 @@ public:
         return ans;
     }
 };
+
+----------------------------------------------
+// Hash Set - O(n)
+----------------------------------------------
+
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        unordered_set<int> numSet(nums.begin(), nums.end());
+
+        int ans = 0;
+        for (int num: numSet) {
+            if (numSet.find(num - 1) != numSet.end()) {
+                continue; // Skip if the previous number exists
+            }
+
+            int sequenceLength = 1;
+            while (numSet.find(num + 1) != numSet.end()) {
+                sequenceLength++;
+                num++;
+            }
+            ans = max(ans, sequenceLength);
+        }
+
+        return ans;
+    }
+};
