@@ -1,3 +1,57 @@
+// Depth-First Search
+
+class Solution {
+private:
+    int n;
+    int longestPath;
+    // contains the last len on each level
+    vector<int> lenByLevel;
+
+    void dfs(int index, string& input, int level, int curLen, bool isFile) {
+        if (index > n) {
+            return;
+        }
+
+        // if newline, do the calc and move to next dir
+        if ((index == n) || (input[index] == '\n')) {
+            int pathLen = curLen + (level != 0 ? 1 + lenByLevel[level - 1] : 0);
+            
+            while (lenByLevel.size() <= level) {
+                lenByLevel.push_back(0);
+            }
+            
+            lenByLevel[level] = pathLen;
+            
+            if (isFile) {
+                longestPath = max(longestPath, pathLen);
+            }
+
+            return dfs(index + 1, input, 0, 0, false); 
+        }
+
+        // if tab, increase level and go next step
+        if (input[index] == '\t') {
+            return dfs(index + 1, input, level + 1, 0, false);
+        }
+
+        isFile = isFile || (input[index] == '.' );
+        return dfs(index + 1, input, level, curLen + 1, isFile); 
+    }
+
+public:
+    int lengthLongestPath(string input) {
+        n = input.size();
+        lenByLevel = vector<int>();
+        longestPath = 0;
+
+        dfs(0, input, 0, 0, false);
+
+        return longestPath;
+    }
+};
+
+// ---------------------------------------------------------------------------------
+
 class Solution {
 public:
     
