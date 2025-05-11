@@ -208,6 +208,8 @@ public:
     }
 };
 
+// Using strategy pattern to park vehicles
+
 int main() {
     Solution solution;
 
