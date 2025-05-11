@@ -215,6 +215,79 @@ public:
     }
 };
 
+void testSingleOrderRating() {
+    Solution solution;
+    solution.init();
+
+    solution.orderFood("order-1", "food-1", "restaurant-A");
+    solution.rateOrder("order-1", 4);
+
+    auto top = solution.getTopRatedRestaurants();
+    assert(top.size() == 1);
+    assert(top[0] == "restaurant-A");
+}
+
+void testRatingTieBreaker() {
+    Solution solution;
+    solution.init();
+
+    solution.orderFood("o1", "food-x", "res-A");
+    solution.orderFood("o2", "food-x", "res-B");
+    solution.rateOrder("o1", 3);
+    solution.rateOrder("o2", 3);
+
+    auto top = solution.getTopRatedRestaurants();
+    assert(top.size() == 2);
+    assert(top[0] == "res-A"); // because "A" < "B"
+}
+
+void testMultipleRatingsAverage() {
+    Solution solution;
+    solution.init();
+
+    solution.orderFood("o1", "food-x", "res-X");
+    solution.orderFood("o2", "food-x", "res-X");
+    solution.rateOrder("o1", 2);
+    solution.rateOrder("o2", 4); // avg = 3.0
+
+    auto top = solution.getTopRatedRestaurants();
+    assert(top[0] == "res-X");
+}
+
+void testTopByFoodItem() {
+    Solution solution;
+    solution.init();
+
+    solution.orderFood("o1", "food-apple", "res-1");
+    solution.orderFood("o2", "food-apple", "res-2");
+    solution.rateOrder("o1", 5);
+    solution.rateOrder("o2", 3);
+
+    auto top = solution.getTopRestaurantsByFood("food-apple");
+    assert(top[0] == "res-1");
+}
+
+void testNoOrders() {
+    Solution solution;
+    solution.init();
+
+    auto top = solution.getTopRatedRestaurants();
+    assert(top.empty());
+
+    auto topByFood = solution.getTopRestaurantsByFood("some-food");
+    assert(topByFood.empty());
+}
+
+void runAllTests() {
+    testSingleOrderRating();
+    testRatingTieBreaker();
+    testMultipleRatingsAverage();
+    testTopByFoodItem();
+    testNoOrders();
+
+    cout << "✅ All tests passed!" << endl;
+}
+
 // Using observer pattern to update the rating in rating strategies
 
 int main() {
@@ -256,6 +329,8 @@ int main() {
     solution.printHelper(solution.getTopRestaurantsByFood("food-0")); // returns [restaurant-1, restaurant-0, restaurant-2]
     solution.printHelper(solution.getTopRestaurantsByFood("food-1")); // returns [restaurant-0]
     solution.printHelper(solution.getTopRatedRestaurants()); // returns [restaurant-1, restaurant-2, restaurant-0]
+
+    runAllTests();
 
     return 0;
 }
