@@ -30,7 +30,7 @@
 class Solution {
 public:
     NestedInteger deserialize(string s) {
-        if (isdigit(s[0])) {
+        if (s[0] != '[') {
             return NestedInteger(stoi(s));
         }
 
@@ -54,12 +54,16 @@ public:
                 stk.top().add(top);
                 i++;
             } else {
-                int num = 0;
+                int num = 0, sign = 1;
+                if (s[i] == '-') {
+                    sign = -1;
+                    i++;
+                }
                 while (i < n && isdigit(s[i])) {
                     num = num * 10 + (s[i] - '0');
                     i++;
                 }
-                stk.top().add(NestedInteger(num));
+                stk.top().add(NestedInteger(num * sign));
             }
         }
 
