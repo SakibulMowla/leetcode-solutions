@@ -1,0 +1,53 @@
+class Solution {
+private:
+    int calculate(int a, int b, char ch) {
+        if (ch == '*') {
+            return a * b;
+        }
+        return a / b;
+    }
+
+    bool isOperator(char ch) {
+        return ch == '+' || ch == '-' || ch == '*' || ch == '/';
+    }
+
+public:
+    int calculate(string s) {
+        int num = 0;
+        int len = s.size();
+        char prevOperator = '+';
+        stack<int> nums;
+
+        for (int i = 0; i < len; i++) {
+            char ch = s[i];
+
+            if (isdigit(ch)) {
+                num = num * 10 + (ch - '0');
+            }
+            if (isOperator(ch) || i == len - 1) {
+                if (prevOperator == '+') {
+                    nums.push(num);
+                } else if (prevOperator == '-') {
+                    nums.push(-num);
+                } else {
+                    int a = nums.top();
+                    nums.pop();
+                    nums.push(calculate(a, num, prevOperator));
+                }
+
+                num = 0;
+                prevOperator = ch;
+            }
+        }
+
+        nums.push(num);
+
+        int ans = 0;
+        while (!nums.empty()) {
+            ans += nums.top();
+            nums.pop();
+        }
+
+        return ans;
+    }
+};
