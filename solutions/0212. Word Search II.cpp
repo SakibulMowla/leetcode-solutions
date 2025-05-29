@@ -1,3 +1,92 @@
+struct TrieNode {
+    bool isWord;
+    unordered_map<char, int> child;
+    
+    TrieNode(): isWord(false) {}
+};
+
+class Solution {
+private:
+    vector<TrieNode> tree;
+    int rows, cols;
+    vector<string> ans;
+
+    vector<int> dx = {-1, 1, 0, 0};
+    vector<int> dy = {0, 0, -1, 1};
+
+    void insert(string& word) {
+        int node = 0;
+        for (char ch: word) {
+            if (tree[node].child.find(ch) == tree[node].child.end()) {
+                tree[node].child[ch] = tree.size();
+                tree.push_back(TrieNode());
+            }
+            node = tree[node].child[ch];
+        }
+        tree[node].isWord = true;
+    }
+
+    bool isWithinBoard(int x, int y) {
+        return x >= 0 && x < rows && y >= 0 && y < cols;
+    }
+
+    void backtrack(int x, int y, int node, vector<vector<char>>& board, string& cur) {
+        char letter = board[x][y];
+        cur.push_back(letter);
+
+        if (tree[node].isWord) {
+            ans.push_back(cur);
+            tree[node].isWord = false;
+        }
+
+        board[x][y] = '#';
+
+        for (int k = 0; k < 4; k++) {
+            int newX = x + dx[k];
+            int newY = y + dy[k];
+
+            if (!isWithinBoard(newX, newY)) {
+                continue;
+            }
+
+            char ch = board[newX][newY];
+
+            if (tree[node].child.find(ch) != tree[node].child.end()) {
+                backtrack(newX, newY, tree[node].child[ch], board, cur);
+            }
+        }
+
+        board[x][y] = letter;
+        cur.pop_back();
+    }
+
+public:
+    vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
+        // insert root node
+        tree.push_back(TrieNode());
+        for (string& word: words) {
+            insert(word);
+        }
+
+        rows = board.size();
+        cols = board[0].size();
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                char ch = board[i][j];
+                if (tree[0].child.find(ch) != tree[0].child.end()) {
+                    string cur;
+                    backtrack(i, j, tree[0].child[ch], board, cur);
+                }
+            }
+        }
+
+        return ans;
+    }
+};
+
+// ------------------------------------------------------------------------------------------
+
 class Solution {
     int rows;
     int cols;
