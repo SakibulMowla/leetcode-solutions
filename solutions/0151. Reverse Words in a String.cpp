@@ -36,6 +36,61 @@ public:
 
 class Solution {
 private:
+    void removeExtraSpaces(string& s) {
+        int len = 0;
+        char prev = ' ';
+
+        for (char ch: s) {
+            if (ch != ' ') {
+                s[len++] = ch;
+            } else {
+                if (prev != ' ') {
+                    s[len++] = ch;
+                }
+            }
+            prev = ch;
+        }
+
+        if (len && s[len - 1] == ' ') 
+            len--;
+
+        s.erase(len);
+    }
+
+    void reverse(string& s, int start, int end) {
+        while (start < end) {
+            swap(s[start], s[end]);
+            start++;
+            end--;
+        }
+    }
+
+public:
+    string reverseWords(string s) {
+        removeExtraSpaces(s);
+
+        int len = s.size();
+        reverse(s, 0, len - 1);
+
+        for (int i = 0; i < len; i++) {
+            int j = i;
+            while (j + 1 < len && s[j + 1] != ' ') 
+                j++;
+            
+            reverse(s, i, j);
+            i = j + 1;
+        }
+
+        return s;
+    }
+};
+
+// ===============================
+// Time - O(n) Memory - O(n)
+// ===============================
+
+class Solution {
+private:
     void removeLeadingSpaces(string& s) {
         while (s[0] == ' ') {
             s.erase(0, 1);
