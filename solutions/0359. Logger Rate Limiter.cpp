@@ -1,6 +1,6 @@
 class Logger {
 private:
-unordered_map<string, int> messageToTime;
+    unordered_map<string, int> messageToTime;
 
 public:
     /** Initialize your data structure here. */
